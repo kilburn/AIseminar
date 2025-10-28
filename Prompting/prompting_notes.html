@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>prompting_notes.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/*
+
+Atom One Dark by Daniel Gamage
+Original One Dark Syntax theme from https://github.com/atom/one-dark-syntax
+
+base:    #282c34
+mono-1:  #abb2bf
+mono-2:  #818896
+mono-3:  #5c6370
+hue-1:   #56b6c2
+hue-2:   #61aeee
+hue-3:   #c678dd
+hue-4:   #98c379
+hue-5:   #e06c75
+hue-5-2: #be5046
+hue-6:   #d19a66
+hue-6-2: #e6c07b
+
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  color: #abb2bf;
+  background: #282c34;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #5c6370;
+  font-style: italic;
+}
+
+.hljs-doctag,
+.hljs-keyword,
+.hljs-formula {
+  color: #c678dd;
+}
+
+.hljs-section,
+.hljs-name,
+.hljs-selector-tag,
+.hljs-deletion,
+.hljs-subst {
+  color: #e06c75;
+}
+
+.hljs-literal {
+  color: #56b6c2;
+}
+
+.hljs-string,
+.hljs-regexp,
+.hljs-addition,
+.hljs-attribute,
+.hljs-meta-string {
+  color: #98c379;
+}
+
+.hljs-built_in,
+.hljs-class .hljs-title {
+  color: #e6c07b;
+}
+
+.hljs-attr,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-type,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-number {
+  color: #d19a66;
+}
+
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link,
+.hljs-meta,
+.hljs-selector-id,
+.hljs-title {
+  color: #61aeee;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+.hljs-link {
+  text-decoration: underline;
+}
+
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="a-generalised-guide-to-prompt-engineering">A Generalised Guide to Prompt Engineering</h1>
+<h3 id="principles">Principles</h3>
+<p>An agnostic guide to prompting, drawing on Anthropic's prompt engineering tutorial and the Learn Prompting
+guide.</p>
+<p><strong>Author:</strong> Antonio Lobo-Santos</p>
+<hr>
+<p><em>WATERMARK: This document was created by Antonio Lobo-Santos - AI Coding Seminar</em></p>
+<hr>
+<h3 id="table-of-contents">Table of Contents</h3>
+<ul>
+<li><a href="#a-generalised-guide-to-prompt-engineering">A Generalised Guide to Prompt Engineering</a>
+<ul>
+<li><a href="#principles">Principles</a></li>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#prompt-hierarchy">Prompt Hierarchy</a>
+<ul>
+<li><a href="#system-vs-user-prompts">System vs. User Prompts</a></li>
+</ul>
+</li>
+<li><a href="#foundational-principles-clarity-and-intent">Foundational Principles: Clarity and Intent</a>
+<ul>
+<li><a href="#the-anatomy-of-a-prompt">The Anatomy of a Prompt</a></li>
+<li><a href="#being-clear-direct-and-positive">Being Clear, Direct, and Positive</a></li>
+<li><a href="#the-power-of-role-personas">The Power of Role Personas</a></li>
+</ul>
+</li>
+<li><a href="#intermediate-techniques-structure-and-reasoning">Intermediate Techniques: Structure and Reasoning</a>
+<ul>
+<li><a href="#separating-instructions-from-data">Separating Instructions from Data</a></li>
+<li><a href="#guiding-output-format-and-style">Guiding Output Format and Style</a></li>
+<li><a href="#chain-of-thought-reasoning">Chain-of-Thought Reasoning</a></li>
+<li><a href="#few-shot-prompting-with-examples">Few-Shot Prompting with Examples</a></li>
+</ul>
+</li>
+<li><a href="#advanced-applications-and-safeguards">Advanced Applications and Safeguards</a>
+<ul>
+<li><a href="#mitigating-hallucinations">Mitigating Hallucinations</a></li>
+<li><a href="#building-complex-prompts">Building Complex Prompts</a></li>
+</ul>
+</li>
+<li><a href="#beyond-a-single-prompt-advanced-workflows">Beyond a Single Prompt: Advanced Workflows</a>
+<ul>
+<li><a href="#prompt-chaining">Prompt Chaining</a></li>
+<li><a href="#augmenting-llms-with-external-tools">Augmenting LLMs with External Tools</a></li>
+<li><a href="#search-and-retrieval-rag">Search and Retrieval (RAG)</a></li>
+</ul>
+</li>
+<li><a href="#resources">Resources:</a></li>
+<li><a href="#references">References:</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="prompt-hierarchy">Prompt Hierarchy</h2>
+<h3 id="system-vs-user-prompts">System vs. User Prompts</h3>
+<p>Modern LLMs use a prompt hierarchy to structure conversations. Typically, a system prompt (or system
+message) sets the global context, constraints, and style for the model, while the user prompt contains the
+specific task or question within that context. The system prompt essentially acts as a contract or rules-of-
+engagement that the assistant must follow throughout the conversation.</p>
+<ul>
+<li><strong>System Prompt:</strong> Defines the AI's identity, role, and high-level directives. This is where you state the
+model's persona (e.g. &quot;You are an expert technical writing assistant&quot;), overall tone, and forbidden
+behaviors. Once set, these guidelines implicitly apply to all subsequent responses. The system
+prompt should establish boundaries (what the AI should or shouldn't do) and any persistent style
+or ethical guidelines. It preloads context before the user's actual query is considered.</li>
+<li><strong>User Prompt:</strong> Contains the actual user query or task, often with additional context or data. The user
+prompt should be clear and explicit about what is needed, leveraging the conditions set by the
+system prompt. Generally, all task-specific instructions and data belong in the user prompt, not the
+system prompt. This separation ensures the model first adopts the right role/policies (system
+level), then focuses on executing the requested task under those conditions.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<blockquote>
+<p><strong>System:</strong> &quot;You are a seasoned data science assistant. Respond in a concise, formal tone and refuse
+to speculate beyond provided information.&quot;
+<strong>User:</strong> &quot;Analyze the following dataset for anomalies and summarize your findings in bullet points.&quot;</p>
+</blockquote>
+<p>(Here the system prompt sets an expert persona and constraints, while the user prompt provides
+the task and data to analyze.)</p>
+<p>The synergy between system and user prompts ensures the model stays in character and on task. The system
+prompt keeps the model focused and consistent in style, and the user prompt drives the specific content. Used
+correctly, this hierarchy leads to more coherent and reliable outputs.</p>
+<hr>
+<h2 id="foundational-principles-clarity-and-intent">Foundational Principles: Clarity and Intent</h2>
+<h3 id="the-anatomy-of-a-prompt">The Anatomy of a Prompt</h3>
+<p>A well-crafted prompt is composed of distinct components, each serving a role in guiding the model's
+output. Not every prompt needs every component, but understanding them helps in structuring effective
+prompts:</p>
+<ol>
+<li><strong>Directive</strong> - The core instruction specifying the task. This is what you want the model to do or answer. A clear directive is crucial; without it, the AI may respond irrelevantly.</li>
+<li><strong>Context / Additional Information</strong> - Background details or data needed to perform the task. This
+could be a text passage to summarize, a user query history, or facts the model should use. Including
+relevant context ensures the AI has the information required to produce a correct answer</li>
+<li><strong>Role / Persona</strong> - An optional identity for the model to adopt (e.g. teacher, translator, Python
+interpreter). Assigning a role helps the model shape its tone and domain knowledge appropriately</li>
+<li><strong>Examples (Few-Shots)</strong> - Demonstrations of desired behavior. By showing input output examples,
+you implicitly teach the model the pattern or format you expect.</li>
+<li><strong>Output Formatting</strong> - Explicit instructions on how the answer should be structured or formatted
+(bullet points, JSON, code block, etc.). This guides the model's presentation of the answer</li>
+</ol>
+<p>These elements can be assembled in different orders. A commonly effective pattern is to provide any
+examples and context first, and place the main directive last. Ensuring the primary instruction comes at
+the end of the prompt helps the model focus on the actual task after processing all prior details. In
+other words, the model reads all the context and examples, then finally sees &quot;Now, do X&quot; - reducing the
+chance it continues rattling off context instead of executing the task.</p>
+<p><strong>Prompt Example (Well-Structured):</strong></p>
+<pre class="hljs"><code><div> **Role:** You are a science communicator.
+ **Context:** Audience is high-school students with basic biology
+ knowledge.
+ **Examples:** (Q&amp;A style example provided)_
+ **Formatting:** Answer in exactly 3 bullet points, simple language.
+ **Directive:** Explain how DNA stores genetic information.
+</div></code></pre>
+<p><strong>Why it works:</strong> The role ensures an appropriate tone, the context clarifies who the answer is for,
+an example (not shown above for brevity) would illustrate the expected level and style, the
+formatting requirement fixes the output structure, and the directive at the end makes the
+task explicit only after all context is established.</p>
+<p><strong>Bad Example (Poorly Structured):</strong></p>
+<blockquote>
+<p>Explain DNA to a student. It's the molecule with genetic info. Give 3
+points.
+You are a science teacher.</p>
+</blockquote>
+<p><strong>What's wrong:</strong> The instructions are jumbled and the directive (&quot;Explain...&quot;) appears at the start,
+before context (&quot;genetic info&quot;) and role (&quot;you are a teacher&quot;) are fully given. The model might
+start answering too early or ignore some instructions. There's also minimal guidance on style
+or depth.</p>
+<p>In summary, think of a prompt as a mini-program for the AI: declare any required setup (role), feed in data
+(context, examples), specify output requirements, and finally call the main instruction. This modular
+approach yields far more predictable results than a single run-on sentence.</p>
+<h3 id="being-clear-direct-and-positive">Being Clear, Direct, and Positive</h3>
+<p>LLMs are literal and do exactly what you ask - so phrasing matters. Ambiguous or under-specified prompts
+(e.g. &quot;Make this better&quot;) often produce unsatisfactory results. Effective prompts use precise language and
+leave little room for interpretation. Some best practices:</p>
+<ul>
+<li><strong>Be Specific:</strong> State exactly what output you want. Instead of &quot;Tell me about climate change&quot;, say &quot;In 100
+words, summarize the impact of climate change on coastal cities, focusing on rising sea levels.&quot;
+(specifying length, topic focus, and angle). Specific directives lead to focused, relevant answers.</li>
+<li><strong>Use Strong Action Verbs:</strong> e.g. &quot;List three causes of X&quot;, &quot;Compare A and B&quot;, &quot;Convert this JSON to YAML&quot;.
+Avoid vague verbs like &quot;handle&quot; or &quot;discuss&quot; without clarity.</li>
+<li><strong>Give Explicit Constraints:</strong> If you have requirements on length, format, or style, mention them. For
+example, &quot;Respond in Markdown table format,&quot; or &quot;Limit the answer to one paragraph.&quot; If you need only
+code as output, say so clearly</li>
+<li><strong>Prefer Positive Phrasing:</strong> It's more effective to tell the model what to do rather than what not to do. For instance, use &quot;Write in an active voice.&quot; instead of &quot;Do not use passive voice.&quot; Models can
+sometimes ignore negations (&quot;do not&quot;) but will follow affirmative instructions for desired style or
+content. Guiding the behavior works better than only forbidding certain things.</li>
+<li><strong>Include Success Criteria or Checks:</strong> If applicable, describe what a good answer should achieve (e.g.
+&quot;The solution should include at least one real-world example and cite a source.&quot;). This helps the model
+self-evaluate its response against the criteria.</li>
+</ul>
+<p><strong>Bad Example (Unclear):</strong> &quot;Explain this better.&quot;
+<strong>What's wrong:</strong> Too vague what to explain? Better in what sense (shorter? more formally?
+more detail?) The AI may guess incorrectly what you want improved.</p>
+<p><strong>Improved Prompt:</strong> &quot;Rewrite the following explanation in clearer, simpler terms for a
+general audience, in under 3 sentences.&quot;
+<strong>Why it's better:</strong> Specifies the transformation (simplify the explanation), the target audience
+(general public), and limits scope (3 sentences). The model isn't left to guess your intent.</p>
+<p>In short: clarity is king. A good mental check is Anthropic's &quot;new colleague test&quot; if a new employee with
+no context would be confused by your instructions, the AI likely will be too. Take the time to spell out
+exactly what you mean in straightforward language.</p>
+<h3 id="the-power-of-role-personas">The Power of Role Personas</h3>
+<p>One of the most powerful prompt tools is assigning the AI a persona or role to play. By front-loading a role,
+you constrain the style, tone, and knowledge domain of the model's responses. This is often called &quot;role
+prompting&quot; or &quot;persona injection.&quot; For example: &quot;You are a senior tax law attorney...&quot;, or &quot;Act as a customer
+support chatbot for a banking app...&quot;.</p>
+<p>A strong persona description typically includes:</p>
+<ul>
+<li><strong>Role &amp; Goal:</strong> What the AI is and what it should optimize for. (E.g. &quot;You are a helpful coding assistant
+who explains solutions clearly to junior developers.&quot;)</li>
+<li><strong>Expertise or Domain Knowledge:</strong> Frame the AI's knowledge background (real or fictional). This can
+dramatically improve factual and contextual accuracy when answering domain-specific questions. For instance, a &quot;medical expert&quot; will respond with more technical detail on health topics.</li>
+<li><strong>Tone &amp; Style Guidelines:</strong> Specify formality, dialect, or other stylistic preferences. A role can imply
+style (a &quot;friendly librarian&quot; vs &quot;military drill instructor&quot; will naturally adopt different tones).</li>
+<li><strong>Constraints/Biases:</strong> If needed, mention any limits (e.g. &quot;As a medical advisor, do not provide
+diagnosis, only general info.&quot;).</li>
+<li><strong>Example Behavior:</strong> Optionally, give a short example of how this persona might respond to
+something, illustrating the desired style.</li>
+</ul>
+<p>Role prompting can significantly boost accuracy and relevance on complex tasks by focusing the model's
+attention. It also helps keep the model &quot;in character&quot; for multi-turn conversations, making the
+experience more consistent for end-users.</p>
+<p><strong>Example Persona Prompt:</strong></p>
+<blockquote>
+<p><strong>System:</strong> &quot;You are CodeGuru, an AI programming assistant. You have expertise in Python and
+software engineering best practices. You provide step-by-step explanations and well-
+commented code solutions. You never just give the final code you first explain your
+approach.&quot;
+<strong>User:</strong> &quot;How do I sort a list of dictionaries in Python by a value?&quot;</p>
+</blockquote>
+<p><strong>Result:</strong> The assistant responds as a Python expert teacher, perhaps explaining the sorted()
+function and giving a sample code snippet with comments.</p>
+<p><strong>Bad Persona Example:</strong> &quot;You are a historian or maybe a scientist. Answer nicely.&quot;
+<strong>Why it's bad:</strong> It's ambiguous (&quot;historian or scientist?&quot;) and provides no concrete guidance on
+style or depth. The model may ignore an ill-defined persona.</p>
+<p><strong>Caution:</strong> While personas are powerful, avoid overly stereotyped or biased roles. Be specific and factual in
+defining the role (focus on skills, not stereotypes). And remember that a role prompt doesn't grant the
+model actual credentials it only influences style and knowledge emphasis. Always combine role prompts
+with factual context or retrieval for domains requiring up-to-date information.</p>
+<hr>
+<h2 id="intermediate-techniques-structure-and-reasoning">Intermediate Techniques: Structure and Reasoning</h2>
+<h3 id="separating-instructions-from-data">Separating Instructions from Data</h3>
+<p>When providing substantial input data along with your instructions, it's critical to clearly separate the two. This avoids any accidental mixing of what the model should use (data) vs. what it should do (instructions). The model should never confuse a user-provided text with an instruction from the user. Use delimiters or markup to isolate different parts of the prompt. Anthropic's guidance suggests
+employing XML-like tags for this purpose, but you can also use Markdown code fences or triple quotes.</p>
+<p>For example:</p>
+<pre class="hljs"><code><div> User: Summarise the text in the &lt;article&gt; below in one sentence.
+ &lt;article&gt;
+ [Full text of article goes here...]
+&lt;/article&gt;
+</div></code></pre>
+<p>By wrapping the article in a <code>&lt;article&gt;...&lt;/article&gt;</code> tag (or similarly triple quotes),
+we make it obvious which text is source material and which is the actual task. The model is then less likely to
+treat the article's content as part of the instructions. This practice improves accuracy and reduces
+errors from misinterpreting prompt segments.</p>
+<p>Using structured markup or Markdown for prompts often yields the best results. Many modern LLMs
+have been trained on data that includes markdown and HTML/XML patterns, so they respond well to well-
+formatted prompts. For instance, delimiting a code block or dataset with triple backticks or tags
+like <code>&lt;data&gt;...&lt;/data&gt;</code> helps the model recognise it as an object to use or transform, not to be expanded or
+altered.</p>
+<p><strong>Example:</strong></p>
+<pre class="hljs"><code><div> Role: You are an API documentation assistant.
+ Instructions: Read the JSON in &lt;input&gt; and explain each field
+ briefly.
+ &lt;input&gt;
+ {
+ &quot;name&quot;: &quot;Acme Rocket&quot;,
+ &quot;thrust&quot;: 300,
+ &quot;stages&quot;: 2
+ }
+ &lt;/input&gt;
+</div></code></pre>
+<p>Here, the model can reliably identify the JSON inside <code>&lt;input&gt;</code> as data to be analyzed, not
+something to ignore or confuse with the request. The instructions outside the tag are clearly
+separate.</p>
+<p><strong>Counter-Example:</strong>
+If we just wrote: &quot;Here is some JSON { ... }. Explain each field.&quot;
+without clear delimitation, the
+model might mistakenly blend the JSON into its answer or miss that it's supposed to focus
+only on that JSON.</p>
+<p><strong>Tip:</strong> Be consistent with whatever delimiters you choose. If you use <code>&lt;example&gt;...&lt;/example&gt;</code> for
+examples, do so throughout your prompts. Consistent structure helps the AI parse your intent. You can
+even nest tags (e.g. <code>&lt;examples&gt;&lt;example&gt;...</code>) to reflect hierarchy. Ultimately, a well-structured
+prompt is easier for both the model and you to debug.</p>
+<h3 id="guiding-output-format-and-style">Guiding Output Format and Style</h3>
+<p>Often you don't just need a correct answer you need it in a particular format or style. LLMs are quite
+capable of producing structured outputs on demand. The key is to tell them exactly what format you expect.</p>
+<ul>
+<li><strong>Specify the format explicitly:</strong> If you want a JSON object, say &quot;Respond with a JSON object containing the
+following keys...&quot;. If you need a bullet list or a table, mention that in the prompt. For complex formats, you
+might provide a template or schema. For example:
+<ul>
+<li>&quot;Give the answer as a Markdown table with columns X, Y, Z.&quot;</li>
+<li>&quot;Output only valid JSON matching this schema: ...&quot;</li>
+<li>&quot;Your response should be an SQL query that satisfies the request.&quot;</li>
+</ul>
+</li>
+</ul>
+<p>Clear formatting instructions ensure the model's response is directly usable without extensive editing. As Learn Prompting notes, without guidance, the AI might produce correct information in the wrong
+structure, requiring more work to extract or reformat.</p>
+<p>If a format is critical (e.g. a snippet of code or data), it's wise to constrain the output: for instance, &quot;Provide
+only the Python code, no explanation.&quot; or &quot;Return the answer in exactly two sentences.&quot; LLMs will generally obey
+these constraints if clearly stated.</p>
+<p>Controlling style is similarly done via instructions or role cues. You might add directives like &quot;Explain in a
+friendly, conversational tone.&quot; or &quot;Use technical language appropriate for an academic paper.&quot; Such style
+instructions can even be considered a part of the formatting requirement - they shape how the content is
+delivered, not just what the content is.</p>
+<ul>
+<li><strong>Multi-step approach:</strong> Sometimes asking for reasoning and a formatted answer at once can produce
+conflated outputs. In these cases, you can prompt in stages. For example, first ask the model to think
+through the problem and silently arrive at an answer, then in a second prompt ask it to output the answer in a
+specific format (perhaps by feeding the reasoning back in a new prompt). This two-step &quot;reason then
+format&quot; approach can yield more reliable results when the format is complex (like code with specific
+structure, or answers with citations).</li>
+</ul>
+<p><strong>Example - Forcing a JSON Output:</strong></p>
+<blockquote>
+<p><strong>User:</strong> &quot;Analyze the following text and output your findings as a JSON with fields <code>sentiment</code>
+and <code>key_points</code>. Text: &lt;long text&gt;&quot;
+<strong>Assistant:</strong> <code>{&quot;sentiment&quot;: &quot;negative&quot;, &quot;key_points&quot;: [&quot;...&quot;]}</code></p>
+</blockquote>
+<p>In this scenario, the user explicitly requested JSON and the assistant complied. The triple backticks
+help encapsulate the input text, and the model's training on JSON patterns lets it know how to
+format the output.</p>
+<p><strong>Bad Example:</strong> &quot;Is the user message positive or negative? What are the key points in it?&quot;
+(with no
+mention of format) - The model might respond in prose, e.g. &quot;The message seems negative. Key
+points include...&quot;, which is correct content but not in JSON. This would require the developer to
+parse the text, an unnecessary complication.</p>
+<p>In sum, treat the model like a flexible but literal-minded intern: if you need the report in Excel, tell them to
+use a table. If you need a sonnet, tell them the rhyme scheme. When you communicate the desired form
+clearly, the model will usually oblige.</p>
+<h3 id="chain-of-thought-reasoning">Chain-of-Thought Reasoning</h3>
+<p>Complex problems often benefit from step-by-step reasoning, which can be encouraged through Chain-of-
+Thought (CoT) prompting. Instead of giving a one-shot answer, the model is prompted to &quot;think out loud&quot; -
+listing intermediate steps or an explanation before the final answer. This method yields more transparent
+and often more accurate results on tasks that involve multiple reasoning steps.</p>
+<p>There are a few ways to invoke CoT:</p>
+<ul>
+<li><strong>Zero-Shot CoT:</strong> Simply instruct the model to show its reasoning. A common phrase is &quot;Let's think step
+by step.&quot; appended to the query. For example: &quot;What is 19% of 5619? Let's think step by step.&quot; The
+model might then break down the calculation before giving the result.</li>
+<li><strong>Few-Shot CoT:</strong> Provide examples of questions with step-by-step solutions in the prompt, then ask a
+new question. Seeing the pattern of reasoning in examples encourages the model to produce similar
+reasoning for the new query.</li>
+<li><strong>Structured CoT:</strong> Use a format like: &quot;First, explain your reasoning, then give the final answer on a new
+line.&quot; This explicitly separates the reasoning process from the answer.</li>
+<li><strong>Self-Consistency (Advanced):</strong> One can generate multiple reasoning paths (via multiple outputs) and
+let the model choose the most common answer - an advanced technique useful in research, but less
+needed for everyday prompting.</li>
+</ul>
+<p>Chain-of-thought helps in mathematical problems, logical reasoning, code analysis, and any scenario
+where a human would naturally break the task into sub-tasks. By letting the model &quot;show its work,&quot; you also
+gain insight into where it might be going wrong, which aids debugging. In fact, Anthropic notes that
+seeing the model's thought process can highlight where a prompt was unclear, helping you refine it.</p>
+<p>However, CoT does make the output longer (which can impact latency). Use it when needed, but not for
+trivial tasks. Also, not all models require an explicit CoT prompt some advanced models do complex
+reasoning internally. That said, even with GPT-4 or Claude 2, explicitly requesting reasoning can be useful if
+you want the rationale or if the problem is particularly tricky.</p>
+<p><strong>Example - CoT in action:</strong></p>
+<blockquote>
+<p><strong>User:</strong> &quot;You have £100. You earn £30, then spend £20, then earn £50. How much do you have
+now? Let's work this out step by step.&quot;
+<strong>Assistant:</strong> &quot;First, starting with £100. Earning £30 brings it to £130. Spending £20 reduces it to
+£110. Then earning another £50 brings it to £160. So the final amount is £160.&quot;</p>
+</blockquote>
+<p>Here, the model followed the prompt to show each step, making it easy to verify the logic before
+accepting the answer. Many prompting guides emphasise: if a task is complex, let the model think. It's like asking a student to show
+their working - it generally leads to better outcomes</p>
+<h3 id="few-shot-prompting-with-examples">Few-Shot Prompting with Examples</h3>
+<p>Few-shot prompting (also known as &quot;in-context learning&quot;) means including a few examples of the desired
+output behavior within your prompt. Instead of instructing the model from scratch, you show it: &quot;When
+given input X, here's an ideal output Y.&quot; Providing 2-5 well-chosen examples can dramatically steer the
+model's responses</p>
+<p>Key tips for effective few-shot prompting:</p>
+<ul>
+<li><strong>Relevance:</strong> The examples should closely match the task and domain of your query. If you want
+the model to output an email draft, provide examples of email prompts and drafts.</li>
+<li><strong>Clarity:</strong> Mark examples clearly, e.g. with a label like &quot;Example 1 - Input:&quot; and &quot;Example 1 - Output:&quot;.
+Or use tags like <code>&lt;example&gt;</code> to wrap each example. This ties back to using structure to
+separate examples from the final query.</li>
+<li><strong>Consistency:</strong> All examples should follow the same format or pattern you want in the output. The
+model may generalize from them. Inconsistency can confuse it.</li>
+<li><strong>Coverage:</strong> Show diverse examples if possible, to cover different aspects of the task and avoid the
+model overfitting to one style. However, avoid contradictory examples.</li>
+<li><strong>Quantity:</strong> You generally don't need many. Often 2-3 examples suffice. More can improve
+performance up to a point, but too many might consume context or cause the model to parrot
+the examples too closely.</li>
+</ul>
+<p>Few-shot is especially useful for enforcing format or structure (the model &quot;learns&quot; the pattern from
+examples). It's also helpful for tasks with some complexity or creative element, where pure instructions
+might be interpreted in various ways. By giving examples, you nail down one particular way you want it
+done.</p>
+<p><strong>Example - Few-Shot Prompt:</strong>
+User prompt:</p>
+<pre class="hljs"><code><div> You are a translator AI. Translate from English to French.
+ Examples:
+ English: &quot;Good morning.&quot;
+ French: &quot;Bonjour.&quot;
+ English: &quot;How are you?&quot;
+ French: &quot;Comment ça va ?&quot;
+ English: &quot;I am learning French.&quot;
+French:
+</div></code></pre>
+<p>Here we provided two English sentences with their French translations as examples. The
+model will infer the pattern and produce the French for &quot;I am learning French.&quot; following the
+style of the examples (including punctuation, etc.).</p>
+<p><strong>Why it works:</strong> The examples function as implicit training data the AI sees the translation
+mapping and continues it. This technique was famously shown to allow GPT-3 to translate,
+summarize, and perform tasks without explicit finetuning by just providing a few examples in
+the prompt.</p>
+<p>One must be cautious to avoid prompt leakage where example outputs might contain information not
+intended in the final answer. Also, if examples are too dominant (e.g. 10 examples all doing the exact same
+thing), the model might become overly rigid or even copy them inappropriately. Balance and relevance are
+key.</p>
+<p>In summary, show, don't just tell. High-quality examples can convey the nuances of format and tone better
+than instructions alone, and they can significantly improve accuracy, consistency, and performance on
+specific tasks.</p>
+<hr>
+<h2 id="advanced-applications-and-safeguards">Advanced Applications and Safeguards</h2>
+<h3 id="mitigating-hallucinations">Mitigating Hallucinations</h3>
+<p>One challenge with LLMs is their tendency to &quot;hallucinate&quot; - i.e. produce factually incorrect or made-up
+information in a confident manner. Even cutting-edge models can sometimes output inaccuracies or details
+not supported by any source. Prompt engineering offers some strategies to minimize this:</p>
+<ul>
+<li><strong>Provide Grounding Data:</strong> Whenever possible, supply the model with relevant source text
+(documents, knowledge base snippets, etc.) in the prompt, and instruct it to only use that
+information for its answer. This is part of Retrieval-Augmented Generation (RAG). For example,
+&quot;Using the information above, answer the question...&quot;. By grounding the response in provided context,
+you reduce off-base speculation.</li>
+<li><strong>Ask for Evidence or Quotes:</strong> Encourage the model to cite sources or include direct quotes from the
+provided text. For instance, &quot;Include the relevant quote and page number for each claim.&quot; This forces
+the model to align its answer with actual text. Anthropic suggests even having the model
+find supporting quotes after drafting an answer, and if none are found, revise the answer.</li>
+<li><strong>Allow Uncertainty:</strong> Explicitly tell the model it's okay to say &quot;I don't know&quot; or &quot;Not enough information&quot;
+if it's unsure. This avoids the pressure to fabricate an answer. E.g. &quot;If the answer is not in the
+passage, respond with 'I don't have that information.&quot; This simple instruction can drastically reduce
+false information.</li>
+<li><strong>Break the task down:</strong> If a question is multi-faceted, use a chain-of-thought or multi-turn approach
+where the model can gather its thoughts. For example, first have it list what information is known vs
+unknown, then proceed to answer. This can prevent it from glossing over unknown parts.</li>
+<li><strong>Use Tools or Verification:</strong> In critical cases, you can prompt the model to perform a web search (if
+the platform supports it), call a calculator, or otherwise verify facts with an external tool. Some
+frameworks allow you to set up &quot;tool use&quot; where the model output includes an action like
+<code>SEARCH(&quot;query&quot;)</code>, which is executed by an external system, then the results are fed back in. This
+can greatly help factual accuracy for up-to-date or detailed queries.</li>
+<li><strong>Higher Temperature for Brainstorm, Lower for Final:</strong> A trick is to let the model be creative (higher
+temperature) when brainstorming possible answers or interpretations (to get diverse thoughts),
+then use a separate prompt with a low temperature to produce a final answer focusing only on the
+vetted information. This reduces out-of-left-field content.</li>
+</ul>
+<p><strong>Example - Grounded Answer:</strong></p>
+<blockquote>
+<p>User provides an article about a medical study and asks: &quot;According to the article, what were the
+two main findings?&quot;
+<strong>Better prompt:</strong> &quot;Read the article below and answer using only its content. Quote the sentences
+that state the results.&quot;
+This ensures the answer sticks to the article. The assistant might
+answer: &quot;The article states, 'Finding A...' and 'Finding B...'. Therefore, the two main findings
+are A and B.&quot;</p>
+</blockquote>
+<p><strong>Bad prompt:</strong> &quot;What were the main findings of the study?&quot; (with the article text given but no
+instruction to use it) - The model might mix the article info with general knowledge or make
+something up if it's unsure.</p>
+<p>No prompt can eliminate hallucinations entirely, but these techniques increase reliability. The goal is to
+channel the model's confidence into areas supported by data, and give it permission to admit ignorance
+when appropriate. As Anthropic's guide says, ensuring outputs are auditable (via quotes or citations) makes
+them more trustworthy.</p>
+<h3 id="building-complex-prompts">Building Complex Prompts</h3>
+<p>In real-world applications, prompts often need to combine multiple techniques described above. Complex
+prompts might involve setting a role, providing extensive context, giving an example, demanding a specific
+format, and so on, all in one go. Essentially, you are writing a small script for the AI to follow.</p>
+<p>Let's consider different domains and what a complex prompt might entail:</p>
+<p>The following table:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Domain</th>
+<th style="text-align:left">Likely Prompt Components</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Chatbots (Q&amp;A)</strong></td>
+<td style="text-align:left">System persona (consistent friendly tone) + relevant context or knowledge base + conversation history + user question + format (if any) + maybe few-shot for style. Often retrieval (RAG) is used to supply current info.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Legal Analysis</strong></td>
+<td style="text-align:left">Strong expert role (&quot;&quot;You are a veteran lawyer...&quot;&quot;) + retrieved statutes/cases (grounding data) + perhaps a multi-step reasoning (CoT) to analyze facts + demand for structured output (e.g., &quot;&quot;Conclusion&quot;&quot; and &quot;&quot;Rationale&quot;&quot; sections) for clarity.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Finance / Analytics</strong></td>
+<td style="text-align:left">Possibly prompt chaining: first prompt to gather facts, second to perform analysis. Or a single prompt with an embedded procedure (numbered steps to follow). Likely requires JSON or tabular output for numbers. Domain-specific role (financial analyst) for terminology.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Coding Assistance</strong></td>
+<td style="text-align:left">Include code context (user's code or error) clearly separated (in markdown or <code>&lt;code&gt;</code> tags) + an expert coder persona (&quot;&quot;You are a senior Python developer&quot;&quot;) + chain-of-thought for debugging (&quot;&quot;Think through the code step by step&quot;&quot;) + maybe a few-shot examples of inputs and outputs (if doing something like code translation). Ensure the output is only code or an explanation as needed (formatting).</td>
+</tr>
+</tbody>
+</table>
+<p>These are just examples many tasks combine elements. In Anthropic's interactive tutorial (Chapter 9:
+Building Complex Prompts), they showcase industry use cases like chatbots, legal assistants, financial reports,
+and coding helpers. Each case demonstrates weaving multiple prompt engineering tools together for
+the best result.</p>
+<p>Think of prompts as modular components: you can reuse a well-crafted role prompt across many queries,
+or maintain a standard format template for Q&amp;A tasks. For instance, you might always include a few-shot
+example of how to output an SQL query, whenever you ask for database-related help. Or have a standard
+system prompt that sets the tone for support tickets.</p>
+<p><strong>Example - Complex Prompt for Coding (with mistakes explanation):</strong></p>
+<pre class="hljs"><code><div>System: &quot;You are a coding assistant who not only provides code but also explains it. Always
+start with a brief explanation, then provide the code in a Markdown block. If the code might
+be error-prone, warn at theend.&quot;
+</div></code></pre>
+<pre class="hljs"><code><div> User: &quot;The user's code (below) is giving an IndexError. Fix the bug.
+ def find_item(lst):
+ return lst[1]
+ print(find_item([]))
+</div></code></pre>
+<p><strong>Result:</strong> The assistant first explains the issue (IndexError due to empty list), then shows a
+corrected code block, then warns about empty input.
+<strong>Analysis:</strong> This prompt combined a role, an instruction to explain + code format, user code
+provided in markdown, and a specific error scenario. The assistant's answer is rich and
+structured, exactly as needed for a coding help context.</p>
+<p>The art of complex prompting is in balancing guidance and freedom. Too rigid, and the model might get
+constrained or confused (especially if it can't fulfill all instructions perfectly). Too loose, and it might wander.
+Start simple, then layer on complexity as you identify needs. Often a few iterations get you to a prompt that
+covers all bases.</p>
+<hr>
+<h2 id="beyond-a-single-prompt-advanced-workflows">Beyond a Single Prompt: Advanced Workflows</h2>
+<h3 id="prompt-chaining">Prompt Chaining</h3>
+<p>Instead of one giant prompt trying to do everything, consider breaking a task into a sequence of prompts,
+feeding the output of one step into the next. This approach is known as prompt chaining. It allows the model
+to tackle complex tasks in manageable chunks, which can improve both performance and interpretability</p>
+<p><strong>Why chain prompts?</strong></p>
+<ul>
+<li>
+<ul>
+<li>It helps with accuracy, as each subtask gets the model's full attention without distraction from other
+aspects. It's less likely to drop details.</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>It provides clarity, since each prompt can focus on a single
+aspect with clearer instructions. It adds traceability and easier debugging: if the final answer has an
+issue, you can pinpoint which step (prompt) went wrong.</li>
+</ul>
+</li>
+</ul>
+<p><strong>When to chain:</strong></p>
+<ul>
+<li>Use chaining for multi-step processes like: data extraction → analysis → summary, or outline → draft → refine. If you notice the model struggling or mixing up steps in one prompt, that's a sign you can split the task</li>
+<li>For example, generating a long report with citations could be chained as: (1) gather relevant quotes, (2)
+analyse and draw conclusions from quotes, (3) format the final report with quotes and commentary.</li>
+</ul>
+<p><strong>How to chain:</strong></p>
+<ul>
+<li>Design each prompt to produce an output that feeds into the next. You might need to instruct the model to
+output in a specific interim format (like JSON or a list) so that the next prompt can easily use it. Some
+systems allow passing the raw text output directly; others might require you to manually insert it into the
+next prompt.</li>
+<li>Anthropic's guide suggests using consistent tags to pass info between chain steps, e.g.
+wrapping an answer in <code>&lt;analysis&gt;...&lt;/analysis&gt;</code> so the next prompt can refer to <code>&lt;analysis&gt;</code>
+content.</li>
+</ul>
+<p>A simple chained workflow could be: 1. Prompt 1: &quot;Read the customer reviews and list the top 3 complaints
+mentioned.&quot; -&gt; Model outputs a list of complaints.
+2. Prompt 2: &quot;Given the complaints: [list from Prompt 1], suggest one improvement for each.&quot; -&gt; Model
+outputs improvements.
+This is easier for the model than doing it in one prompt (&quot;Read reviews and list complaints and
+improvements...&quot; might cause it to lose structure).</p>
+<p>Chaining also shines in interactive applications or agentic setups, where the model may loop through
+thought → action → observation → thought → action, etc., which is essentially chaining with logic (as in
+ReAct frameworks).</p>
+<p>Keep in mind that chaining can consume more API calls and latency. But for critical tasks, the reliability
+gains often outweigh that. Each link in the chain is an opportunity to verify or modify outputs before
+moving on (you can even have human or programmatic checks in between).</p>
+<h3 id="augmenting-llms-with-external-tools">Augmenting LLMs with External Tools</h3>
+<p>The capabilities of an LLM can be extended enormously by allowing it to use external tools or APIs. This
+concept underlies AI agents. Rather than the model simply spewing text, you let it output a special format
+that triggers some action outside the model, then feed the result back in. By doing this, the AI can, for
+example, perform calculations, fetch real-time information, or query databases - things beyond its trained
+knowledge.</p>
+<p>For instance, you might design the system such that if the model produces an output like
+<code>CALCULATOR[(0.19)*(5619)]</code>, an external calculator will actually compute that. The result
+(1067.61 in that case) can then be given back to the model to incorporate into the final answer.</p>
+<p>Common tool integrations include:</p>
+<ul>
+<li><strong>Search engines or knowledge bases:</strong> The model can ask to search the
+web or a database for information. The retrieved text is then appended to the prompt.</li>
+<li><strong>Calculators or
+code evaluators:</strong> The model can request a calculation or run a piece of code (e.g., to solve a math problem
+or simulate something).</li>
+<li><strong>APIs:</strong> The model can produce a JSON with an API call specification, which your
+system executes and returns the result. E.g., <code>get_stock_price(&quot;GOOG&quot;)</code> -&gt; returns price -&gt; model
+continues with that info.</li>
+<li><strong>File systems:</strong> It could create or read files (in a constrained environment), useful
+for more complex multi-step tasks.</li>
+</ul>
+<p>In a prompt, you might instruct the model about available tools and the format to use. For example: &quot;You
+can use the following tools: Calculator, WebSearch. To use a tool, output ToolName[input]. When you need no
+more tools, just provide the final answer.&quot; The conversation then involves the model alternating between
+reasoning and tool calls.</p>
+<p><strong>Why use tools?</strong> It compensates for the model's weaknesses (like up-to-date knowledge, or precise
+arithmetic) by delegating to specialized systems. As the Learn Prompting guide notes, this allows the
+model to incorporate information beyond its training data, making it far more powerful and reliable on
+dynamic queries. It's an emerging area that effectively turns a static LLM into an interactive problem-
+solving agent.</p>
+<p><strong>Quick Example - Weather Agent:</strong></p>
+<blockquote>
+<p><strong>User:</strong> &quot;Will it rain in Barcelona tomorrow?&quot;
+<strong>Assistant thinking (hidden):</strong> It might decide to use a weather API tool.
+<strong>Assistant action:</strong> <code>WEATHER_API[&quot;Barcelona&quot;, &quot;2025-10-26&quot;]</code> - (The system sees this and
+calls an actual weather API, gets result e.g. &quot;Forecast says light rain&quot;).
+<strong>Assistant observation (hidden):</strong> &quot;Forecast says light rain.&quot;
+<strong>Assistant answer:</strong> &quot;Yes according to the latest forecast, expect light rain in Barcelona
+tomorrow.&quot;</p>
+</blockquote>
+<p>In this hypothetical chain, the model knew it should fetch current info rather than guess. The tool
+use format and result integration were pre-defined by the system designers.</p>
+<p>From a prompting perspective, enabling tool use means formatting the prompt to inform the model of
+tools and how to call them, and then being able to capture those calls. It moves beyond pure text
+generation to an action loop. While implementing this is more involved than basic prompting, it illustrates
+the upper end of what prompt engineering can achieve when combined with software design.</p>
+<p>(Note: The specifics of tool use vary by platform e.g., OpenAI uses &quot;functions&quot; in their API, and Anthropic's Claude
+has an &quot;Assistant with Tools&quot; mode via the MCP. The principles remain similar: the model is prompted about
+functions and expected to output a JSON or bracketed call which the host system executes.)</p>
+<h3 id="search-and-retrieval-rag">Search and Retrieval (RAG)</h3>
+<p>We touched on RAG (Retrieval-Augmented Generation) earlier as a way to mitigate hallucinations. It's worth
+emphasizing as an advanced architecture: combining LLMs with a search or retrieval system can
+drastically improve the quality and accuracy of responses.</p>
+<p>In a RAG setup, when the user asks something, the system first uses a search module (which could be a
+vector similarity search over documents, or a traditional keyword search, etc.) to fetch relevant text
+snippets. These snippets are then included in the prompt given to the LLM. The LLM's job becomes
+synthesizing an answer based on that retrieved content, rather than relying purely on its internal knowledge.</p>
+<p>Prompt-wise, this often means your user prompt might look like:</p>
+<pre class="hljs"><code><div> [System:] You are an AI assistant...
+ [User:]
+ DOCUMENTS:
+ 1. &quot;Excerpt from article A...&quot;
+ 2. &quot;Excerpt from article B...&quot;
+ QUESTION: &quot;User's question here...&quot;
+ Instructions: Answer using the above documents and cite the source number for
+each fact.
+</div></code></pre>
+<p>Here, DOCUMENTS: are retrieved pieces of text. The prompt instructs the model to use them and even cite
+them (e.g. &quot;According to doc 1, ...&quot;).</p>
+<p>The benefit is clear: you get grounded answers with sources. Indeed, the Claude documentation notes
+that their search result integration feature enables &quot;web search-quality citations&quot; in responses and is
+powerful for RAG applications needing accurate sourcing.</p>
+<p>Key considerations for RAG prompts:</p>
+<ul>
+<li><strong>Quality of retrieval:</strong> The prompt is only as good as the documents
+you provide. Make sure your search retrieves relevant passages (using good queries, proper indexing, etc.).</li>
+<li><strong>Chunking and IDs:</strong> Break knowledge sources into reasonably sized chunks and assign them identifiers. That way the model can quote or refer to a specific chunk without confusion.</li>
+<li><strong>Prompt limit:</strong> You might not
+include all retrieved text if it's too much. Often you take the top N passages. Summarizing or filtering may
+help if they're lengthy.</li>
+<li><strong>Cite or not:</strong> Telling the model to cite sources (like &quot;[1]&quot; corresponding to document</li>
+</ul>
+<!-- end list -->
+<ol>
+<li>not only provides the user with transparency, it also implicitly forces the model to stick to those sources
+(since it knows it should only state what source 1/2 say, etc.). This is a clever prompt hack to keep it in
+line.</li>
+</ol>
+<!-- end list -->
+<ul>
+<li><strong>Failure mode:</strong> If nothing relevant is found, you might prompt the model to say &quot;I don't have information on
+that&quot; rather than guessing.</li>
+</ul>
+<p>Anthropic's own Claude has a dedicated search result augmentation where you can supply documents in a
+structured format and it will naturally cite them. Regardless of implementation, the prompt design
+pattern is similar across platforms.</p>
+<p><strong>Example - RAG Prompt:</strong></p>
+<blockquote>
+<p>After searching a knowledge base, you feed Claude:
+&quot;Context:
+Doc1: Mars is the fourth planet from the Sun and has two moons (Phobos and Deimos).
+Doc2: Jupiter is the fifth planet and has 79 moons.
+Question: How many moons does Mars have? Provide the answer with a citation.&quot;
+The model should answer: &quot;Mars has two moons.&quot; (citing Doc1).
+If asked about Jupiter, it would say 79 with a citation to Doc2. If asked about Earth (not in
+docs), ideally: &quot;The context provided does not mention Earth's moons.&quot;</p>
+</blockquote>
+<p>This way, the knowledge is extendable and updatable without retraining the model - you just update your
+database. It's an extremely practical and increasingly common technique.</p>
+<p>In conclusion, retrieval+LLM hybrids leverage the best of both worlds: the expansive reasoning and
+language ability of LLMs, and the factual accuracy of a curated knowledge source. Designing prompts for
+these systems requires juggling the extra context, but as we saw, it mostly involves clear structuring and
+source attribution instructions.</p>
+<h2 id="resources">Resources:</h2>
+<p>Two GPTs and meta-prompts are include for generating good prompts and for
+GPTs:</p>
+<ul>
+<li><strong>Prompt Generator:</strong> https://chatgpt.com/g/g-68fdf99d3d408191802fa7746fa9dde6-prompt-enhancement-protocol</li>
+<li><strong>Prompt Evaluator:</strong>
+Meta-promtps: in <code>meta-prompts</code> folder</li>
+</ul>
+<hr>
+<p><em>WATERMARK: This document was created by Antonio Lobo-Santos - AI Coding Seminar</em></p>
+<hr>
+<p><strong>Footer:</strong> Document prepared by Antonio Lobo-Santos for the AI Coding Seminar.</p>
+<hr>
+<h2 id="references">References:</h2>
+<ol>
+<li>
+<p><strong>Anthropic (2025).</strong> <em>Prompt Engineering – Overview.</em><br>
+Official Claude documentation covering prompt engineering best practices including clarity, examples, chain-of-thought reasoning, and role prompting.<br>
+Available at: <a href="https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview">https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview</a></p>
+</li>
+<li>
+<p><strong>Anthropic (2024).</strong> <em>Prompt Engineering Interactive Tutorial.</em><br>
+A multi-chapter GitHub tutorial illustrating basic to advanced prompt engineering concepts with examples.<br>
+Available at: <a href="https://github.com/anthropics/prompt-eng-interactive-tutorial/tree/master">https://github.com/anthropics/prompt-eng-interactive-tutorial/tree/master</a></p>
+</li>
+<li>
+<p><strong>Learn Prompting (2025).</strong> <em>Prompt Engineering Guide: Introduction.</em><br>
+An open-source learning resource explaining prompt design principles, structure, and use of examples.<br>
+Available at: <a href="https://learnprompting.org/docs/introduction">https://learnprompting.org/docs/introduction</a></p>
+</li>
+</ol>
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+# Alembic Database Migrations
+
+This directory contains the Alembic migration configuration and scripts for the TweetEval NLP Platform database schema.
+
+## Structure
+
+- `env.py` - Alembic environment configuration
+- `script.py.mako` - Template for generating migration scripts
+- `versions/` - Directory containing all migration scripts
+- `README` - This file
+
+## Usage
+
+### Creating New Migrations
+
+To create a new migration based on changes to your models:
+
+```bash
+# Auto-generate migration based on model changes
+alembic revision --autogenerate -m "Description of changes"
+
+# Create empty migration script for manual editing
+alembic revision -m "Description of changes"
+```
+
+### Running Migrations
+
+To apply migrations to the database:
+
+```bash
+# Upgrade to the latest revision
+alembic upgrade head
+
+# Upgrade to a specific revision
+alembic upgrade <revision_id>
+
+# Downgrade to a previous revision
+alembic downgrade <revision_id>
+
+# Downgrade to the base (empty) state
+alembic downgrade base
+```
+
+### Viewing Migration History
+
+```bash
+# Show current revision
+alembic current
+
+# Show migration history
+alembic history
+
+# Show details of a specific revision
+alembic show <revision_id>
+```
+
+## Environment Variables
+
+Alembic will automatically use the `DATABASE_URL` environment variable if set (for Docker environments). Otherwise, it will fall back to the URL configured in `alembic.ini`.
+
+## Best Practices
+
+1. **Always review auto-generated migrations** - Auto-generation is helpful but may not capture everything correctly.
+
+2. **Use descriptive commit messages** - Make it clear what each migration does.
+
+3. **Test migrations** - Always test migrations on a development database before applying to production.
+
+4. **Don't modify existing migrations** - Instead, create a new migration to fix issues.
+
+5. **Backup before major migrations** - Always have a backup before applying schema changes to production.
+
+## Docker Usage
+
+When running with Docker Compose:
+
+```bash
+# Enter the backend container
+docker compose-f docker-compose.dev.yml exec backend bash
+
+# Run migrations
+alembic upgrade head
+
+# Create new migration
+alembic revision --autogenerate -m "Add new feature"
+```
+
+## Database Schema
+
+The current schema includes:
+
+- **users** - User authentication and profile information
+- **datasets** - Dataset metadata and processing status
+- **tweets** - Individual tweet data and preprocessing results
+- **analysis_results** - NLP analysis results from TweetEval models
+- Additional tables for search history, export jobs, and system configuration
+
+See the documentation in `docs/database/` for detailed schema information.

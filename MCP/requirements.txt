@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+sqlite-utils
+fastmcp
+requests
+python-dotenv

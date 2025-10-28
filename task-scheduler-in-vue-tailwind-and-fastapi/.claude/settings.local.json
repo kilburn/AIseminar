@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(micromamba run:*)",
+      "Bash(micromamba info:*)",
+      "Bash(docker compose exec backend python:*)",
+      "Bash(docker compose:*)",
+      "WebFetch(domain:registry.npmjs.org)",
+      "Skill(docker-testing)",
+      "Bash(docker run:*)",
+      "WebSearch"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "sandbox": {
+    "autoAllowBashIfSandboxed": true,
+    "enabled": true
+  }
+}

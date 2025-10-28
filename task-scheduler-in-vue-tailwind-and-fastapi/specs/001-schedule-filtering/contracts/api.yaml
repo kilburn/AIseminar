@@ -1,0 +1,427 @@
+openapi: 3.0.3
+info:
+  title: Task Scheduler API
+  description: API for managing and filtering tasks in the task scheduler application
+  version: 1.0.0
+  contact:
+    name: Task Scheduler Team
+
+servers:
+  - url: /api
+    description: Base API path (proxied through Nginx)
+
+paths:
+  /tasks:
+    get:
+      summary: Get filtered list of tasks
+      description: Retrieve tasks with optional filtering, sorting, and pagination
+      tags:
+        - Tasks
+      parameters:
+        - name: search
+          in: query
+          description: Search term to filter tasks by title or description
+          schema:
+            type: string
+          example: "important meeting"
+        - name: status
+          in: query
+          description: Filter by task status (can specify multiple)
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [pending, in_progress, completed, cancelled]
+          style: form
+          explode: false
+          example: "pending,in_progress"
+        - name: priority
+          in: query
+          description: Filter by task priority (can specify multiple)
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [low, medium, high, urgent]
+          style: form
+          explode: false
+          example: "high,urgent"
+        - name: tags
+          in: query
+          description: Filter by task tags (can specify multiple)
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: false
+          example: "work,meeting"
+        - name: due_date_from
+          in: query
+          description: Filter tasks due on or after this date
+          schema:
+            type: string
+            format: date
+          example: "2025-01-01"
+        - name: due_date_to
+          in: query
+          description: Filter tasks due on or before this date
+          schema:
+            type: string
+            format: date
+          example: "2025-12-31"
+        - name: created_date_from
+          in: query
+          description: Filter tasks created on or after this date
+          schema:
+            type: string
+            format: date
+          example: "2025-01-01"
+        - name: created_date_to
+          in: query
+          description: Filter tasks created on or before this date
+          schema:
+            type: string
+            format: date
+          example: "2025-12-31"
+        - name: overdue_only
+          in: query
+          description: Show only overdue tasks (due date passed and not completed)
+          schema:
+            type: boolean
+            default: false
+        - name: completed_only
+          in: query
+          description: Show only completed tasks
+          schema:
+            type: boolean
+            default: false
+        - name: sort_by
+          in: query
+          description: Field to sort tasks by
+          schema:
+            type: string
+            enum: [createdDate, dueDate, priority, title, status]
+            default: createdDate
+        - name: sort_order
+          in: query
+          description: Sort order (asc or desc)
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: page_size
+          in: query
+          description: Number of tasks per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Successful retrieval of filtered tasks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilteredTaskResponse'
+        '400':
+          description: Bad request - invalid filter parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /tasks/filter-options:
+    get:
+      summary: Get available filter options
+      description: Retrieve all available values for task filters (statuses, priorities, tags)
+      tags:
+        - Tasks
+      responses:
+        '200':
+          description: Successful retrieval of filter options
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterOptions'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          maxLength: 200
+          example: "Complete project proposal"
+        description:
+          type: string
+          nullable: true
+          example: "Finalize and submit the Q1 project proposal to management"
+        status:
+          type: string
+          enum: [pending, in_progress, completed, cancelled]
+          example: "pending"
+        priority:
+          type: string
+          enum: [low, medium, high, urgent]
+          example: "high"
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["work", "meeting", "important"]
+        createdDate:
+          type: string
+          format: date-time
+          example: "2025-01-28T10:00:00Z"
+        dueDate:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2025-02-15T17:00:00Z"
+        completedDate:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        isOverdue:
+          type: boolean
+          readOnly: true
+          example: false
+        daysUntilDue:
+          type: integer
+          nullable: true
+          readOnly: true
+          example: 18
+
+    FilteredTaskResponse:
+      type: object
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        totalCount:
+          type: integer
+          example: 145
+        filteredCount:
+          type: integer
+          example: 23
+        page:
+          type: integer
+          example: 1
+        pageSize:
+          type: integer
+          example: 20
+        totalPages:
+          type: integer
+          example: 8
+        appliedFilters:
+          $ref: '#/components/schemas/AppliedFilters'
+
+    AppliedFilters:
+      type: object
+      properties:
+        search:
+          type: string
+          nullable: true
+          example: "project"
+        status:
+          type: array
+          items:
+            type: string
+          example: ["pending", "in_progress"]
+        priority:
+          type: array
+          items:
+            type: string
+          example: ["high", "urgent"]
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["work"]
+        dateRange:
+          type: object
+          properties:
+            dueDate:
+              type: object
+              properties:
+                from:
+                  type: string
+                  format: date
+                  example: "2025-01-01"
+                to:
+                  type: string
+                  format: date
+                  example: "2025-01-31"
+        quickFilters:
+          type: object
+          properties:
+            overdueOnly:
+              type: boolean
+              example: false
+            completedOnly:
+              type: boolean
+              example: false
+        sort:
+          type: object
+          properties:
+            field:
+              type: string
+              example: "dueDate"
+            order:
+              type: string
+              example: "asc"
+        pagination:
+          type: object
+          properties:
+            page:
+              type: integer
+              example: 1
+            pageSize:
+              type: integer
+              example: 20
+
+    FilterOptions:
+      type: object
+      properties:
+        statuses:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+              label:
+                type: string
+              count:
+                type: integer
+          example:
+            - value: "pending"
+              label: "Pending"
+              count: 45
+            - value: "in_progress"
+              label: "In Progress"
+              count: 12
+        priorities:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+              label:
+                type: string
+              count:
+                type: integer
+          example:
+            - value: "urgent"
+              label: "Urgent"
+              count: 3
+            - value: "high"
+              label: "High"
+              count: 18
+        tags:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+              label:
+                type: string
+              count:
+                type: integer
+          example:
+            - value: "work"
+              label: "Work"
+              count: 67
+            - value: "personal"
+              label: "Personal"
+              count: 23
+        dateRanges:
+          type: object
+          properties:
+            today:
+              type: object
+              properties:
+                count:
+                  type: integer
+                range:
+                  type: object
+                  properties:
+                    from:
+                      type: string
+                      format: date
+                    to:
+                      type: string
+                      format: date
+            thisWeek:
+              type: object
+              properties:
+                count:
+                  type: integer
+                range:
+                  type: object
+                  properties:
+                    from:
+                      type: string
+                      format: date
+                    to:
+                      type: string
+                      format: date
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Invalid filter parameters"
+        message:
+          type: string
+          example: "due_date_from cannot be after due_date_to"
+        details:
+          type: array
+          items:
+            type: string
+          example:
+            - "Parameter 'due_date_from' has invalid date format"
+            - "Page size must be between 1 and 100"
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: Tasks
+    description: Task management and filtering operations

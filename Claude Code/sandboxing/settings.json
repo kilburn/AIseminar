@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(python3:*)"
+    ],
+    "ask": [
+      "Bash(git:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)"
+    ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "excludedCommands": ["docker"]
+  }
+}
